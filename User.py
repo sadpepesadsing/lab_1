@@ -19,8 +19,8 @@ class UserNotification:
         return f"UserNotification(message={self.message}, notification_type={self.notification_type})"
 
 class Wishlist:
-    def __init__(self):
-        self.wishlist: List[Movie] = []
+    def __init__(self, wishlist: List[Movie] = []):
+        self.wishlist = wishlist
 
     def add_to_wishlist(self, movie: Movie):
         if movie not in self.wishlist:
@@ -51,16 +51,17 @@ class Subscription:
 
 
 class User:
-    def __init__(self, name: str, email: str):
+    def __init__(self, name: str, email: str, watchlist: List[Movie] = [], subscription = Subscription("None"),
+                 wishlist = Wishlist(), notification = UserNotification("Empty", "System")):
         assert isinstance(name, str) and name, "User name must be a non-empty string"
         assert isinstance(email, str) and email, "Email must be a non-empty string"
 
         self.name = name
         self.email = email
-        self.watchlist: List[Movie] = []
-        self.subscription = Subscription("None")
-        self.wishlist = Wishlist()
-        self.notification = UserNotification("Empty", "System")
+        self.watchlist = watchlist
+        self.subscription = subscription
+        self.wishlist = wishlist
+        self.notification = notification
 
     def add_to_watchlist(self, movie: Movie):
         if movie not in self.watchlist:
@@ -89,4 +90,4 @@ class User:
 
     def __str__(self):
         return (f"name={self.name}, email={self.email}, sub={self.subscription.subscription_type},"
-                f" wishlist: {[movie.name for movie in self.wishlist.wishlist]}")
+                f" wishlist: {[movie for movie in self.wishlist.wishlist]}")
