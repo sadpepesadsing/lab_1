@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 from Movie import Movie
 
 class UserNotification:
@@ -51,24 +51,16 @@ class Subscription:
 
 
 class User:
-    def __init__(self, name: str, email: str, watchlist: List[Movie] = [], subscription = Subscription("None"),
+    def __init__(self, name: str, email: str, subscription = Subscription("None"),
                  wishlist = Wishlist(), notification = UserNotification("Empty", "System")):
         assert isinstance(name, str) and name, "User name must be a non-empty string"
         assert isinstance(email, str) and email, "Email must be a non-empty string"
 
         self.name = name
         self.email = email
-        self.watchlist = watchlist
         self.subscription = subscription
         self.wishlist = wishlist
         self.notification = notification
-
-    def add_to_watchlist(self, movie: Movie):
-        if movie not in self.watchlist:
-            self.watchlist.append(movie)
-            print(f"Added '{movie.name}' to watchlist")
-        else:
-            print(f"'{movie.name}' is already in the watchlist")
 
     def change_subscription(self, new_type: str):
         self.subscription.upgrade_subscription(new_type)

@@ -16,7 +16,6 @@ class UserJSONHandler:
         author_data = {
             "name": user.name,
             "email": user.email,
-            "watchlist": user.watchlist,
             "subscription": user.subscription.subscription_type,
             "wishlist": [movie.name for movie in user.wishlist.wishlist],
             "notification": [user.notification.message] + [user.notification.notification_type]
@@ -42,7 +41,7 @@ class UserJSONHandler:
                 data = json.load(file)
             for user_data in data.get("users", []):
                 if user_data["name"] == name:
-                    return User(user_data["name"], user_data["email"], user_data["watchlist"],
+                    return User(user_data["name"], user_data["email"],
                                 Subscription(user_data["subscription"]), Wishlist(user_data["wishlist"]),
                                 UserNotification(user_data["notification"][0], user_data["notification"][1]))
         except (FileNotFoundError, json.JSONDecodeError):
