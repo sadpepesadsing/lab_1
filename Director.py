@@ -1,4 +1,4 @@
-from typing import List, TYPE_CHECKING
+from typing import List, TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from Movie import Movie
@@ -12,7 +12,7 @@ class Director:
         self.birthdate = birthdate
         self.movies: List[Movie] = []
 
-    def add_book(self, movie: Movie):
+    def add_book(self, movie: Optional["Movie"]):
         if movie not in self.movies:
             self.movies.append(movie)
             print(f"Added '{movie.name}' to the director's movies.")
