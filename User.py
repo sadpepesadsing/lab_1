@@ -1,6 +1,23 @@
 from typing import List, Optional
 from Movie import Movie
 
+class UserNotification:
+    def __init__(self, message: str, notification_type: str):
+        assert notification_type in ["System", "Info", "Warning", "Promotion"], "Invalid notification type"
+        self.message = message
+        self.notification_type = notification_type
+
+    def set_notification(self, message: str, notification_type: str):
+        assert notification_type in ["Info", "Warning", "Promotion"], "Invalid notification type"
+        self.message = message
+        self.notification_type = notification_type
+
+    def send_notification(self):
+        print(f"Notification: {self.message} ({self.notification_type})")
+
+    def __str__(self):
+        return f"UserNotification(message={self.message}, notification_type={self.notification_type})"
+
 class Wishlist:
     def __init__(self):
         self.wishlist: List[Movie] = []
@@ -21,7 +38,7 @@ class Wishlist:
 
     def show_wishlist(self):
         movie_titles = [movie.name for movie in self.wishlist]
-        print(f"Wishlist for {self.name}: {movie_titles}")
+        print(f"Wishlist: {movie_titles}")
 
 class Subscription:
     def __init__(self, subscription_type: str):
@@ -34,14 +51,16 @@ class Subscription:
 
 
 class User:
-    def __init__(self, name: str, email: str, subscription: Optional[Subscription]):
+    def __init__(self, name: str, email: str):
         assert isinstance(name, str) and name, "User name must be a non-empty string"
         assert isinstance(email, str) and email, "Email must be a non-empty string"
 
         self.name = name
         self.email = email
         self.watchlist: List[Movie] = []
-        self.subscription = subscription
+        self.subscription = Subscription("None")
+        self.wishlist = Wishlist()
+        self.notification = UserNotification("Empty", "System")
 
     def add_to_watchlist(self, movie: Movie):
         if movie not in self.watchlist:
@@ -49,22 +68,25 @@ class User:
             print(f"Added '{movie.name}' to watchlist")
         else:
             print(f"'{movie.name}' is already in the watchlist")
+
     def change_subscription(self, new_type: str):
         self.subscription.upgrade_subscription(new_type)
 
-    def __str__(self):
-        return f"name={self.name}, email={self.email}, sub={self.subscription.subscription_type}"
+    def add_to_wishlist(self, movie: Movie):
+        self.wishlist.add_to_wishlist(movie)
 
+    def remove_from_wishlist(self, movie: Movie):
+        self.wishlist.remove_from_wishlist(movie)
 
-class UserNotification:
-    def __init__(self, user: User, message: str, notification_type: str):
-        assert notification_type in ["Info", "Warning", "Promotion"], "Invalid notification type"
-        self.user = user
-        self.message = message
-        self.notification_type = notification_type
+    def show_wishlist(self):
+        self.wishlist.show_wishlist()
+
+    def set_notification(self, message: str, notification_type: str):
+        self.notification.set_notification(message, notification_type)
 
     def send_notification(self):
-        print(f"Notification sent to {self.user.name}: {self.message} ({self.notification_type})")
+        self.notification.send_notification()
 
     def __str__(self):
-        return f"UserNotification(user={self.user.name}, message={self.message}, notification_type={self.notification_type})"
+        return (f"name={self.name}, email={self.email}, sub={self.subscription.subscription_type},"
+                f" wishlist: {[movie.name for movie in self.wishlist.wishlist]}")
