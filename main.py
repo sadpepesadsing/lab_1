@@ -22,4 +22,4 @@ example_user = userJSON.read("Denis")
 
 print(f"\n\n\n{example_user}")
 
-userJSON.update("Denis", "pipapaparapum")
+userJSON.update("Denis", "pipapaparapu")
