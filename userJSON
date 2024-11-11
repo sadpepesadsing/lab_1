@@ -1,0 +1,16 @@
+{
+    "users": [
+        {
+            "name": "Denis",
+            "email": "pipapaparapum",
+            "subscription": "Pro",
+            "wishlist": [
+                "Pulp Fiction"
+            ],
+            "notification": [
+                "Thrillers and comedies are the best sponsor of your evening...",
+                "Promotion"
+            ]
+        }
+    ]
+}
