@@ -20,5 +20,5 @@ class Wishlist:
             print(f"'{movie.name}' is not in the wishlist")
 
     def show_wishlist(self):
-        movie_titles = [movie.name for movie in self.wishlist]
-        print(f"Wishlist: {movie_titles}")
+        movie_titles = [f"{movie.name}, {movie.genre}, {movie.director}, {movie.duration} mins" for movie in self.wishlist]
+        return f"Wishlist: {movie_titles}"

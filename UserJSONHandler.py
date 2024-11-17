@@ -1,5 +1,8 @@
 import json
 from typing import Optional
+
+from Director import Director
+from Movie import Movie
 from User import User, Subscription, Wishlist, UserNotification
 
 
@@ -17,7 +20,8 @@ class UserJSONHandler:
             "name": user.name,
             "email": user.email,
             "subscription": user.subscription.subscription_type,
-            "wishlist": [movie.name for movie in user.wishlist.wishlist],
+            "wishlist": [f"{movie.name}\t{movie.genre}\t{movie.duration}\t{movie.director.name}\t{movie.director.birthdate}"
+                         for movie in user.wishlist.wishlist],
             "notification": [user.notification.message] + [user.notification.notification_type]
         }
 
@@ -41,9 +45,18 @@ class UserJSONHandler:
                 data = json.load(file)
             for user_data in data.get("users", []):
                 if user_data["name"] == name:
+                    wishlist = [] #Список фильмов Movie()
+                    for wish in user_data["wishlist"]:
+                        wish = wish.split('\t')
+                        movie_name = wish[0]
+                        genre = wish[1]
+                        duration = int(wish[2])
+                        director = wish[3]
+                        birthday = wish[4]
+                        wishlist.append(Movie(movie_name, genre, duration, Director(director, birthday)))
                     return User(user_data["name"], user_data["email"],
-                                Subscription(user_data["subscription"]), Wishlist(user_data["wishlist"]),
-                                UserNotification(user_data["notification"][0], user_data["notification"][1]))
+                        Subscription(user_data["subscription"]), Wishlist(wishlist),
+                        UserNotification(user_data["notification"][0], user_data["notification"][1]))
         except (FileNotFoundError, json.JSONDecodeError):
             return None
 

@@ -1,6 +1,13 @@
 import xml.etree.ElementTree as ET
 from typing import Optional
+
+from Subscription import Subscription
 from User import User
+from Movie import Movie
+from Director import Director
+from UserNotification import UserNotification
+from Wishlist import Wishlist
+
 
 class UserExistsError(Exception):
     pass
@@ -26,10 +33,11 @@ class UserXMLHandler:
         user_element = ET.SubElement(root, "user")
         ET.SubElement(user_element, "name").text = user.name
         ET.SubElement(user_element, "email").text = user.email
-        ET.SubElement(user_element, "watchlist").text = user.watchlist
         ET.SubElement(user_element, "subscription").text = user.subscription.subscription_type
-        ET.SubElement(user_element, "wishlist").text = [movie.name for movie in user.wishlist.wishlist]
-        ET.SubElement(user_element, "wishlist").text = ([user.notification.message]
+        ET.SubElement(user_element, "wishlist").text = [(f"{movie.name}\t{movie.genre}\t{movie.duration}\t"
+                                                         f"{movie.director.name}\t{movie.director.birthdate}")
+                                                            for movie in user.wishlist.wishlist]
+        ET.SubElement(user_element, "notification").text = ([user.notification.message]
                                                         + [user.notification.notification_type])
 
         tree = ET.ElementTree(root)
@@ -44,8 +52,19 @@ class UserXMLHandler:
                 if user_element.find("name").text == name:
                     email = user_element.find("email").text
                     subscription = user_element.find("subscription").text
-                    notification = user_element.find("notificaion").text
-                    return User(name, email, subscription, )
+                    notification = user_element.find("notification").text
+                    wishlist = [] # список фильмов Movie()
+                    for wish in user_element.find("wishlist"):
+                        wish = wish.split('\t')
+                        movie_name = wish[0]
+                        genre = wish[1]
+                        duration = int(wish[2])
+                        director = wish[3]
+                        birthday = wish[4]
+                        wishlist.append(Movie(movie_name, genre, duration, Director(director, birthday)))
+
+                    return User(name, email, Subscription(subscription), Wishlist(wishlist),
+                                UserNotification(notification[0],notification[1]))
         except (FileNotFoundError, ET.ParseError):
             return None
         return None

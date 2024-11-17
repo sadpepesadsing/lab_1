@@ -35,4 +35,4 @@ class User:
 
     def __str__(self):
         return (f"name={self.name}, email={self.email}, sub={self.subscription.subscription_type},"
-                f" wishlist: {[movie for movie in self.wishlist.wishlist]}")
+                f" wishlist: {self.wishlist.show_wishlist()}")

@@ -12,7 +12,7 @@ class Director:
         self.birthdate = birthdate
         self.movies: List[Movie] = []
 
-    def add_book(self, movie: Optional["Movie"]):
+    def add_movie(self, movie: Optional["Movie"]):
         if movie not in self.movies:
             self.movies.append(movie)
             print(f"Added '{movie.name}' to the director's movies.")

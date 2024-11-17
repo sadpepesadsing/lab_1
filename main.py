@@ -1,6 +1,7 @@
 from Director import Director
 from User import *
 from UserJSONHandler import *
+from UserXMLHandler import *
 
 user = User("Denis", "qwerty@example.com")
 
@@ -22,4 +23,15 @@ example_user = userJSON.read("Denis")
 
 print(f"\n\n\n{example_user}")
 
-userJSON.update("Denis", "pipapaparapu")
+userJSON.update("Denis", "pi")
+
+example_user = userJSON.read("Denis")
+
+print(f"\n{example_user}\n")
+
+userXML = UserXMLHandler("C:\\Users\Денис\PycharmProjects\lab_1\\userXML")
+
+userXML.create(user)
+example_user = userJSON.read("Denis")
+
+print(example_user)
