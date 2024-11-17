@@ -29,17 +29,19 @@ class UserXMLHandler:
         for user_element in root.findall("user"):
             if user_element.find("name").text == user.name:
                 raise UserExistsError(f"User '{user.name}' already exists.")
+        wishlist = ''
+        for movie in user.wishlist.wishlist:
+            wishlist += "\t\t"
+            wishlist += (f"{movie.name}\t{movie.genre}\t{movie.duration}\t"
+                         f"{movie.director.name}\t{movie.director.birthdate}")
 
         user_element = ET.SubElement(root, "user")
         ET.SubElement(user_element, "name").text = user.name
         ET.SubElement(user_element, "email").text = user.email
         ET.SubElement(user_element, "subscription").text = user.subscription.subscription_type
-        ET.SubElement(user_element, "wishlist").text = [(f"{movie.name}\t{movie.genre}\t{movie.duration}\t"
-                                                         f"{movie.director.name}\t{movie.director.birthdate}")
-                                                            for movie in user.wishlist.wishlist]
-        ET.SubElement(user_element, "notification").text = ([user.notification.message]
-                                                        + [user.notification.notification_type])
-
+        ET.SubElement(user_element, "wishlist").text = wishlist[2:]
+        ET.SubElement(user_element, "notification").text = (f"{user.notification.message}\t"
+                                                        f"{user.notification.notification_type}")
         tree = ET.ElementTree(root)
         tree.write(self.filepath)
 
@@ -52,9 +54,9 @@ class UserXMLHandler:
                 if user_element.find("name").text == name:
                     email = user_element.find("email").text
                     subscription = user_element.find("subscription").text
-                    notification = user_element.find("notification").text
+                    notification = user_element.find("notification").text.split('\t')
                     wishlist = [] # список фильмов Movie()
-                    for wish in user_element.find("wishlist"):
+                    for wish in user_element.find("wishlist").text.split('\t\t'):
                         wish = wish.split('\t')
                         movie_name = wish[0]
                         genre = wish[1]
