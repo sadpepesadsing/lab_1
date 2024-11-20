@@ -1,6 +1,7 @@
 from Movie import Movie
 
 class Review:
+    """Класс рецензии"""
     def __init__(self, movie: Movie, user: str, rating: int, comment: str = ""):
         assert isinstance(rating, int) and 1 <= rating <= 5, "Rating must be between 1 and 5"
         assert isinstance(comment, str), "Comment must be a string"
@@ -11,6 +12,7 @@ class Review:
         self.comment = comment
 
     def display_review(self):
+        """Вывести рецензии"""
         print(f"Review for '{self.movie.name}' by {self.user}:")
         print(f"Rating: {self.rating} stars")
         if self.comment:

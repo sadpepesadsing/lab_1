@@ -4,6 +4,7 @@ if TYPE_CHECKING:
     from Movie import Movie
 
 class Director:
+    """Класс режиссера"""
     def __init__(self, name: str, birthdate: str):
         assert isinstance(name, str) and name, "Director name must be a non-empty string"
         assert isinstance(birthdate, str) and birthdate, "Birthdate must be a non-empty string"
@@ -13,6 +14,7 @@ class Director:
         self.movies: List[Movie] = []
 
     def add_movie(self, movie: Optional["Movie"]):
+        """Добавить фильм в список фильмов"""
         if movie not in self.movies:
             self.movies.append(movie)
             print(f"Added '{movie.name}' to the director's movies.")

@@ -60,7 +60,7 @@ class UserJSONHandler:
         except (FileNotFoundError, json.JSONDecodeError):
             return None
 
-    def update(self, name: str, new_email: str):
+    def update(self, name: str, new_email: str) -> bool:
         try:
             with open(self.filepath, "r") as file:
                 data = json.load(file)
@@ -77,7 +77,7 @@ class UserJSONHandler:
             print(e)
             return False
 
-    def delete(self, name: str):
+    def delete(self, name: str) -> bool:
         try:
             with open(self.filepath, "r") as file:
                 data = json.load(file)
